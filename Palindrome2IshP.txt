@@ -1,0 +1,151 @@
+import javax.swing.*; 
+/**
+ * Palindrome 2
+ *
+ * Program will ask user for a phrase and inform the user how many words in the phrase are palindromes.
+ * 
+ * @author Pierre Ishak
+ * 
+ * @version Nov 25, 2020
+ * 
+ */
+public class Palindrome2IshP 
+{  
+  public static boolean isCancelPressed = false; // class variable to keep track of cancel button press, assume not pressed
+  
+  public static void main(String[] args)  
+  {
+    String phraseInput,palindromeWords;
+    int numOfPalindromes;
+    
+    printProgramDescription();
+    phraseInput = getPhrase();
+    palindromeWords = findPalindromes(phraseInput);
+    numOfPalindromes = countNumberOfPalindromes(palindromeWords);
+    displayResults(palindromeWords,numOfPalindromes);
+  }
+  /**
+   * Prints out program description to the user
+   */
+  public static void printProgramDescription()
+  {
+    //Prints Program Description
+    JOptionPane.showMessageDialog(null,"Hello!\nThis program will direct you to enter a phrase.\n" + "Then it will tell you how many words in you phrase will palindromes.","Palindrome 2",JOptionPane.INFORMATION_MESSAGE);
+  }
+  /**
+   * Gets phrase from user
+   * 
+   * @return The phrase that will be checked by the program
+   */
+  public static String getPhrase()
+  {
+    String wordStr, errMsg,wordCleaned;
+    String word = "";
+    Boolean isEmptyString = true;  
+    Boolean catchRun = false; 
+    
+    do
+    {
+      wordStr=JOptionPane.showInputDialog(null,"Words that are the same forwards and backwards are called palindromes.\n"+"This program determines if the words are palindromes\n"+"\nEnter a phrase (do not include a punctuation mark):","Palindrome 2",JOptionPane.QUESTION_MESSAGE);
+      
+      errMsg = "Sorry, your input: \" " + wordStr + " \" was empty";
+      
+      if (wordStr == null)
+      {
+        isCancelPressed = true;  //set sentinel to indicate cancel button was pressed
+        break;
+      }
+      
+      if (wordStr.trim().replaceAll(" ","").isEmpty() == true)
+      {
+        isEmptyString = true; 
+        JOptionPane.showMessageDialog(null,errMsg,"Palindrome 2",JOptionPane.ERROR_MESSAGE);
+      }
+      else
+      {
+        word = wordStr;
+        isEmptyString = false;
+      }
+      
+    }while(wordStr.trim().replaceAll(" ","").isEmpty() == true);  // As long as input is empty, repeat
+    
+    return word;
+  }
+  /**
+   * Checks if each word in the sentence is a palindrome (by flipping it and comparing it)
+   * 
+   * @param phraseInput The user's input
+   * 
+   * @return A sentence with all words that were palindromes in the phrase
+   */
+  public static String findPalindromes(String phraseInput)
+  {
+    String checkWord = "";
+    int phraseLength,wordLength;
+    String palindromeWords="";
+    
+    phraseInput = phraseInput.trim().toLowerCase();
+    
+    String[] phrase = phraseInput.split(" ");
+    
+    if (isCancelPressed==false) //if cancel button not pressed
+    {
+      phraseLength = phrase.length;
+      
+      for (int i = 0; i < phraseLength; i++)
+      {
+        wordLength = phrase[i].length();
+        checkWord = "";
+        
+        for (int k = wordLength - 1; k >= 0; k--)
+        {
+          checkWord += phrase[i].charAt(k);
+        }
+        
+        if (phrase[i].equals(checkWord))
+        {
+          palindromeWords += phrase[i] + ", ";
+        }
+      } 
+    }
+    
+    return palindromeWords ;
+  }  
+  /**
+   * Counts the number of palindromes in the sentence
+   * 
+   * @param palindromeWords A string with all the words in the sentence that are palindromes
+   * 
+   * @return The number of words that are palindromes in the sentence
+   */
+  public static int countNumberOfPalindromes(String palindromeWords)
+  {
+    int numOfPalindromes = 0,lengthOfPalindromeWords;
+    if (isCancelPressed==false) //if cancel button not pressed
+    {
+      lengthOfPalindromeWords = palindromeWords.length();
+      
+      for (int i = 0; i < lengthOfPalindromeWords; i++)
+      {
+        if (palindromeWords.substring(i,i+1).equalsIgnoreCase(","))
+        {
+          numOfPalindromes ++;
+        }
+      }
+    }
+    return numOfPalindromes ;
+  }
+  /**
+   * Prints out how many words in a sentence are palindromes and what they are
+   * 
+   * @param palindromeWords A string with all the words in the sentence that are palindromes
+   * @param numOfPalindromes The number of words that are palindromes in the sentence
+   */
+  public static void displayResults(String palindromeWords,int numOfPalindromes)
+  {
+    if (isCancelPressed==false) //if cancel button not pressed
+    {
+      JOptionPane.showMessageDialog(null,"There are " + numOfPalindromes + " palindromes in the sentence.\n" + "\n The words " + palindromeWords + " are the palindromes in the sentence.","Palindrome 2",JOptionPane.INFORMATION_MESSAGE);
+    }
+  }
+}
